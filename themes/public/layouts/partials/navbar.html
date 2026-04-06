@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-semibold" href="{{ "" | relURL }}">
+      <i class="bi bi-search me-2"></i>{{ .Site.Title }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link{{ if eq .RelPermalink "/results/" }} active{{ end }}"
+             href="{{ "results/" | relURL }}">
+            <i class="bi bi-bar-chart me-1"></i>Results
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

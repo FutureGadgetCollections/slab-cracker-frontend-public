@@ -1,0 +1,77 @@
+{{ define "main" }}
+<h2 class="h5 mb-4 fw-semibold"><i class="bi bi-bar-chart me-2"></i>{{ .Title }}</h2>
+
+<div id="loading" class="text-center py-5">
+  <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<div id="empty-state" class="text-center py-5 d-none">
+  <i class="bi bi-bar-chart fs-1 text-muted"></i>
+  <p class="text-muted mt-2">No analysis results available yet.</p>
+</div>
+
+<div class="card shadow-sm border-0 d-none" id="results-card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="ps-3">Card</th>
+            <th>Cert #</th>
+            <th>Grade</th>
+            <th>Similarity to 10</th>
+            <th>Verdict</th>
+            <th class="text-end pe-3">Date</th>
+          </tr>
+        </thead>
+        <tbody id="results-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+{{ define "page-scripts" }}
+<script>
+  (async () => {
+    try {
+      const results = await loadJsonData('data/recent-analyses.json');
+      document.getElementById('loading').classList.add('d-none');
+
+      if (!results || results.length === 0) {
+        document.getElementById('empty-state').classList.remove('d-none');
+        return;
+      }
+
+      document.getElementById('results-tbody').innerHTML = results.map(r => `
+        <tr>
+          <td class="ps-3 fw-medium">${esc(r.card_name || '—')}</td>
+          <td class="font-monospace">${esc(r.cert_number)}</td>
+          <td><span class="badge bg-secondary">PSA ${r.grade}</span></td>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="progress flex-grow-1" style="height:6px">
+                <div class="progress-bar ${r.similarity >= 0.8 ? 'bg-success' : r.similarity >= 0.6 ? 'bg-warning' : 'bg-danger'}"
+                     style="width:${(r.similarity*100).toFixed(0)}%"></div>
+              </div>
+              <span class="small">${(r.similarity*100).toFixed(1)}%</span>
+            </div>
+          </td>
+          <td>${r.similarity >= 0.8 ? '<span class="badge bg-success">Strong</span>' : r.similarity >= 0.6 ? '<span class="badge bg-warning text-dark">Maybe</span>' : '<span class="badge bg-danger">Skip</span>'}</td>
+          <td class="text-end pe-3 text-muted small">${r.analyzed_at || '—'}</td>
+        </tr>
+      `).join('');
+      document.getElementById('results-card').classList.remove('d-none');
+    } catch (e) {
+      document.getElementById('loading').classList.add('d-none');
+      document.getElementById('empty-state').classList.remove('d-none');
+    }
+  })();
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+</script>
+{{ end }}

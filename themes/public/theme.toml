@@ -1,0 +1,4 @@
+name = "Slab Cracker Public"
+license = "MIT"
+description = "Public read-only theme for Slab Cracker"
+min_version = "0.100.0"
