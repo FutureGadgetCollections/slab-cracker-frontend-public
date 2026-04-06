@@ -1,0 +1,4 @@
+.navbar-brand { letter-spacing: 0.05em; }
+.card { border-radius: 0.75rem; }
+.table thead th { text-transform: uppercase; font-size: 0.75rem; color: #6c757d; }
+.btn { border-radius: 0.5rem; }

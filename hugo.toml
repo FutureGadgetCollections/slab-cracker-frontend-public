@@ -1,0 +1,17 @@
+baseURL = "/"
+languageCode = "en-us"
+title = "Slab Cracker"
+theme = "public"
+
+[params]
+  description = "Graded card analysis results — find the best PSA 9s to re-submit"
+
+  [params.gcs.data]
+    bucket = ""
+  [params.github.data]
+    repo = ""
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
